@@ -1,0 +1,35 @@
+html, body {
+    /*overflow: hidden;*/
+    margin: 0px;
+    height: 100%;
+    width: 100%;
+    font-family: 'Quicksand', sans-serif;
+    font-weight: normal;
+    background-color: rgb(236, 240, 241);
+    color: rgb(41, 128, 185);
+    text-shadow: rgba(52, 152, 219, 0.25) 0px 0px 3px;
+}
+
+.center {
+    text-align: center;
+    width: 100%;
+    padding-top: 5%;
+}
+
+.fa {
+    font-size: 30em;
+    color: rgb(44, 62, 80);
+    text-shadow: rgba(44, 62, 80, 0.40) 0px 0px 6px;
+    clear: both;
+    display: none;
+}
+
+.label {
+    font-size: 3em;
+    display: none;
+}
+
+#text {
+    font-size: 2em;
+    display: none;
+}
