@@ -1,55 +1,76 @@
 $(document).ready(function() {
-  var display = function(selector, animation, next) {
-    $('.label').hide();
-    $('.fa').hide();
-    $('#' + selector).addClass('animated ' + animation[0]);
-    $('#' + selector + '-label').addClass('animated ' + animation[1]);
-    $('#' + selector).show();
-    $('#' + selector + '-label').show();
+    var display = function(selector, animation, next) {
+        $('#error').hide();
+        $('#error-label').hide();
+        $('#headphones').hide();
+        $('#headphones-label').hide();
+        $('#' + selector).addClass('animated ' + animation[0]);
+        $('#' + selector + '-label').addClass('animated ' + animation[1]);
+        $('#' + selector).show();
+        $('#' + selector + '-label').show();
 
-    if (next) {
-      $('#' + selector).one('webkitAnimationEnd mozAnimationEnd MSAnimationEnd oanimationend animationend', function() {
-        setTimeout(next, 1000);
-      });
+        if (next) {
+            $('#' + selector).one('webkitAnimationEnd mozAnimationEnd MSAnimationEnd oanimationend animationend', function() {
+                setTimeout(next, 1000);
+            });
+        }
     }
-  }
 
-  display('headphones', ["fadeInDown", "fadeInUp"]);
-
-  setTimeout(function() {
-    var errorCallback = function(err) {
-      display("error", ["fadeInDown", "fadeInUp"]);
-    };
-
-    navigator.media = (navigator.getUserMedia
-    || navigator.webkitGetUserMedia
-    || navigator.mozGetUserMedia
-    || navigator.msGetUserMedia);
-
-    var context = new (window.AudioContext || window.webkitAudioContext)();
-
-    if (navigator.media && context) {
-      navigator.media({audio: true}, function(stream) {
-        var microphone = context.createMediaStreamSource(stream);
-        var delay = context.createDelay();
-        var gain = context.createGain();
-        delay.delayTime.value = 0.2;
-        gain.gain.value = 1.8;
-
-        microphone.connect(delay);
-        delay.connect(gain);
-        gain.connect(context.destination);
-
-        display('speak', ["fadeInDown", "fadeInUp"], function() {
-          display('speak', ["fadeOutUp", "fadeOutDown"], function(){
-            $('#text').text('mon petit poney');
-            $('#text').show();
-            $('#text').addClass('animated fadeInDown');
-          });
-        });
-      }, errorCallback);
-    } else {
-      errorCallback();
+    var fill_text = function(l) {
+        var a = {
+            'fr': ["Le cornichon est une plante herbacée annuelle de la famille des Cucurbitaceae, cultivée pour ses fruits, récoltés avant maturité et consommés principalement comme condiment. Le nom scientifique est Cucumis sativus. Concombre et cornichon sont une même espèce. Historiquement le concombre était récolté à maturité, à la différence du cornichon, puis des variétés ont été sélectionnées pour produire des cornichons et d'autres des concombres. Les sélections effectuées par l'Homme ont accentué les caractères propres à chacun, pour obtenir des cultivars distincts. Parmi les variétés appréciées de cornichons on peut citer le Fin de Meaux, le Vert petit de Paris, le Délicatesse, l’Amélioré de Bourbonne et le Colet F1.", "Un poney (féminin : ponette), cheval nain en Louisiane, est, selon la définition courante, un cheval de petite taille, avec une conformation et un tempérament particuliers. Il existe de nombreuses races de poneys différentes. Par rapport aux chevaux, les poneys présentent souvent une crinière épaisse, une queue et un pelage fournis, ainsi que des jambes proportionnellement plus courtes, un corps plus large, une ossature plus lourde, une encolure plus courte et épaisse, et une tête plus courte avec le front plus large. La Fédération équestre internationale (FEI) ne prend en compte que la taille pour définir ce qu'est un poney. Selon ses normes, tout cheval de moins d' 1,47 m au garrot (ou 1,48 m ferré) est classé 'poney', afin de faciliter les compétitions officielles.", "Cactus est le nom usuel des plantes de la famille des Cactaceae. On les appelle également cactées. Ce sont presque toutes des plantes grasses ou plantes succulentes, c'est-à-dire des plantes xérophytes qui stockent dans leurs tissus des réserves de 'suc' pour faire face aux longues périodes de sécheresse. Il ne faut pas confondre cactus et plante succulente : toutes les plantes succulentes ne sont pas des cactus. Ce sont des familles de plantes qui ont adopté les mêmes méthodes de lutte contre les périodes de sécheresse, comme les Asclepiadaceae ou les Crassulaceae. Certaines plantes de ces autres familles, par convergence des formes d'espèces soumises aux mêmes contraintes, ressemblent fortement aux cactus. C'est le cas par exemple des euphorbes cactiformes comme Euphorbia canariensis. Pour distinguer les vrais cactus des plantes qui leur ressemblent, il faut se reporter aux critères d'appartenance à la famille des Cactaceae. L'identification se fait par la présence d'aréoles, et, comme plus généralement en botanique, par les fleurs et les fruits."],
+            'en': ["A pickled cucumber (commonly known as a pickle in the United States and Canada or generically as gherkins in the United Kingdom) is a cucumber that has been pickled in a brine, vinegar, or other solution and left to ferment for a period of time, by either immersing the cucumbers in an acidic solution or through souring by lacto-fermentation. A gherkin is not only a pickle of a certain size but also a particular species of cucumber: the West Indian or Burr Gherkin (Cucumis anguria), which produces a somewhat smaller fruit than the garden cucumber (Cucumis sativus). Standard pickles are made from the Burr Gherkin, but the term gherkin has become loosely used as any small cucumber pickled in a vinegar brine, regardless of the variety of cucumber used.", "A pony is a small horse (Equus ferus caballus). Depending on context, a pony may be a horse that is under an approximate or exact height at the withers, or a small horse with a specific conformation and temperament. There are many different breeds. Compared to other horses, ponies often exhibit thicker manes, tails and overall coat, as well as proportionally shorter legs, wider barrels, heavier bone, thicker necks, and shorter heads with broader foreheads. The word 'pony' derives from the old French poulenet, meaning foal, a young, immature horse, but this is not the modern meaning; unlike a horse foal, a pony remains small when fully grown. However, on occasion, people who are unfamiliar with horses may confuse an adult pony with a foal.", "A cactus (plural: cacti, cactuses, or cactus) is a member of the plant family Cactaceae within the order Caryophyllales. The word 'cactus' derives, through Latin, from the Ancient Greek κάκτος (kaktos), a name originally used for a spiny plant whose identity is not certain. Cacti are native to the Americas, ranging from Patagonia in the south to parts of western Canada in the north—except for Rhipsalis baccifera, which also grows in Africa and Sri Lanka. Most cacti live in habitats subject to at least some drought. Many live in extremely dry environments, even being found in the Atacama Desert, one of the driest places on earth. Cacti show many adaptations to conserve water. Most species of cacti have lost true leaves, retaining only spines, which are highly modified leaves. As well as defending against herbivores, spines help prevent water loss by reducing air flow close to the cactus and providing some shade. Cactus spines are produced from specialized structures called areoles, a kind of highly reduced branch. Areoles are an identifying feature of cacti. As well as spines, areoles give rise to flowers, which are usually tubular and multipetaled."],
+            'it': ["Il sottaceto o sottoaceto è un metodo di conservazione degli alimenti tramite fermentazione anaerobica data da una salamoia che produce i batteri dell'acido lattico o marinando il cibo in una soluzione acida come l'aceto. Il cibo così conservato è quindi noto come 'sottaceto'. Questa procedura, oltre a conservare i cibi, conferisce ai prodotti un sapore tipicamente salato o aspro. Tipico dei sottaceti è il pH, che risulta inferiore al 4.6, sufficiente ad eliminare la maggior parte dei batteri. Il sottaceto può durare fino a qualche anno mantenendo invariate le proprie qualità nutritive. Tuttavia per aumentare le capacità antibatteriche vengono a volte aggiunte erbe e spezie con qualità antimicrobiche come semi di senape, aglio, cannella o chiodi di garofano. Se il tipo di cibo utilizzato per la conservazione è sufficientemente umido si usa aggiungere del sale per permetterne la seccatura. Ad esempio i crauti del Trentino-Alto Adige o il Kimchi coreano vengono posti in una salamoia per asciugare l'acqua in eccesso. La naturale fermentazione a temperatura ambiente produce poi la tipica acidità. Il metodo più comune rimane tuttavia la conservazione sotto aceto, da cui deriva il nome.", "La Fédération Équestre Internationale ha stabilito che un cavallo può essere ufficialmente detto pony solo se misura meno di 151cm. Comunque, il termine 'pony' può essere utilizzato in generale per qualunque genere di cavallo dalle dimensioni ridotte, senza badare con esattezza alle sue dimensioni od alla razza; per di più, alcune razze di cavallo posseggono individui adulti sotto i parametri d'altezza per un pony ma che sono tuttavia considerati 'cavalli' ed hanno la possibilità di partecipare a competizioni ufficiali in qualità di cavalli. In Australia cavalli che misurano fra i 140 ed i 150 cm sono conosciuti come galloway. Coloro che hanno scarsa familiarità con i cavalli potrebbero confondere un pony adulto con un cavallo ancora giovane; sebbene un puledro che stia raggiungendo le dimensioni di un cavallo adulto possa essere non più alto di un pony durante il suo primo mese di vita, cavallo e pony sono decisamente diversi. Un pony può essere cavalcato ed essere messo a lavorare, mentre un puledro è generalmente troppo giovane per essere cavalcato o per essere utilizzato come animale da soma. È possibile distinguere un puledro da un pony a causa del fatto che le zampe del puledro sono più lunghe di quelle di un pony ed anche l'intera figura del giovane cavallo è più slanciata ed elastica.", "Le Cactaceae Juss., 1789 (chiamate anche cactacee, più comunemente cactus e, più raramente cacti al plurale) sono una famiglia di piante succulente (piante xerofite, adattate agli ambienti aridi mediante l'accumulo di acqua all'interno di tessuti succulenti) che comprende circa 3000 specie e 120 generi. Sono per lo più utilizzate come piante ornamentali, ma alcune sono anche piante da raccolto. I cactus fanno parte dell'ordine delle Caryophyllales, che include anche altri membri, come le barbabietole, gli spinaci, l'amaranto, i garofani, il rabarbaro, il grano saraceno, il plumbago e la bougainvillea. Le cactaceae sono piante inusuali e facilmente identificabili che sono riuscite ad adattarsi ad ambienti estremamente aridi e caldi, sviluppando diverse caratteristiche fisiologiche e anatomiche per conservare l'acqua. I loro fusti si sono adattati diventando succulenti e fotosintetici, mentre le foglie, molto spesso, sono diventate le spine, una delle caratteristiche più distintive delle piante di questa famiglia."],
+            'es': ["El Salzgurken, y según se menciona en la región cercana a la ciudad alemana de Berlín: Saure Gurken, que en alemán significa pepino ácido (Saure Gurken) o pepino salado o en salazón. Se trata de unos pepinos tratados de tal forma que han fermentado, son muy famosos en la cocina berlinesa. Los Salzgurken son ricos en Vitaminas y Sales minerales. Para la preparación de los Salzgurken se deben elegir siempre los pepinos de tamaño mediano, y se deben poner en salmuera durante al menos 24 horas con agua caliente, se añaden otros condimentos al caldo que dependen de las recetas, como puede ser: pimienta, clavo, eneldo, albahaca, laurel, hojas de vid, hojas de cerezo, rábano, azúcar etc. le añaden vinagre en una especie de olla de barro (Steinguttöpfen) o un barril de madera donde se le deja fermentar.", "Un poni, póney —esta segunda forma menos usada y por ello no recomendada por la Real Academia—, (ambas tomadas de pony en inglés o poney en francés, probablemente todas ellas procedentes de la palabra francesa obsoleta poulenet, diminutivo de poulain, ‘potro’, a su vez del francés antiguo pulain, y quizá a su vez del latín medieval pullamen, ‘animal joven’, derivada del latín clásico pullus), o jaca, es un caballo pequeño de unos 150 cm de altura máxima hasta la cruz, y un peso medio de 100 kg. Es muy rústico y resistente, con formas más o menos masivas, perfil recto y orejas triangulares en lugar de dirigidas hacia dentro como los caballos de mayor alzada.6 Las razas más puras y primitivas conservan caracteres de los equinos primitivos, como rayas a lo largo del lomo, o incluso en las patas, hocico harinoso, crines tupidas y semienhiestas y mucho carácter, lo que compensa su falta de alzada con otras razas de caballos. Se sabe que los antepasados de los actuales caballos eran aproximadamente de esta alzada, y a medida que se los fue domesticando y mejorando la especie, tomaron mayor altura a consecuencia de la selección humana. Los ponis están clasificados dentro de los cuatro tipos principales de caballos primitivos de Eurasia; los otros englobarían los antepasados de razas como los caballos árabes y similares, los caballos genéricos de silla que descendieron del tarpán y por último los antepasados de los caballos de sangre fría. Por tanto, las jacas o ponis son un tipo de caballo que aún conserva los caracteres primitivos.", "Las cactáceas (Cactaceae) son una familia de plantas suculentas y, en gran mayoría, espinosas, conocidas en conjunto como cactos o cactus. Esta familia es originaria de América. Sin embargo, hay una excepción, Rhipsalis baccifera, que está extendida en África tropical, Madagascar y Ceilán. Se cree que la colonización del Viejo Mundo por esta especie es relativamente reciente (unos cuantos cientos de años), probablemente transportada en el tracto digestivo de pájaros migratorios en forma de semillas o, según otra teoría, en forma de plantas adheridas a troncos impulsados por corrientes marinas. Muchas otras especies de cactáceas se han naturalizado, en condiciones similares a las de su hábitat, en otras partes del mundo, tras ser introducidas por el hombre. El mejor ejemplo es quizás Opuntia ficus-indica, especie que se encuentra plenamente integrada en la zona mediterránea. Fue introducida allí por sus frutos comestibles. Muchas plantas suculentas, tanto en el Viejo como en el Nuevo Mundo, tienen una notable semejanza con los cactus y, a menudo, son así llamadas en lenguaje corriente. Sin embargo, esto se debe a la evolución paralela, ya que ninguna de ellas está estrechamente emparentada con las cactáceas. La característica identificativa más clara de la familia de los cactus es la areola, una estructura especializada de donde surgen las espinas, los vástagos nuevos y, en muchas ocasiones, las flores."],
+            'de': ["Salzgurken, in Nord- und Ostdeutschland auch als saure Gurken bekannt, sind durch Milchsäuregärung haltbar gemachte Gurken. Sie wurden schon in der römischen Antike geschätzt und sind heute hauptsächlich östlich einer gedachten Linie von Berlin nach Wien (Salzgurkenmeridian) im gesamten östlichen Europa und Russland verbreitet. Zur Herstellung werden feste, mittelgroße und unbeschädigte Einlegegurken gründlich gereinigt, etwas eingesalzen und nach etwa 24 Stunden mit kaltem Wasser abgespült, anschließend kommen mit je nach Rezept variierende weitere Zutaten hinzu, vor allem Dill, Meerrettich und Knoblauch, aber auch Pfeffer- und Pimentkörner, Lorbeer, Weinblätter oder Kirschblätter, Basilikum können zugegeben werden. In vorher mit Essig gereinigten oder ausgeschwefelten Steintöpfen oder Holzfässern werden die Gurken geschichtet, mit mäßig gesalzener und nach einmaligem Aufkochen abgekühlter Salzlake übergossen und schließlich mit einem Leinen- oder Baumwolltuch, einem Holzbrett und einem Stein beschwert – zum Sterilisieren vorher ausgekocht –, sodass die Gurken immer von der Salzlake bedeckt bleiben. Um den Fermentationsprozess in Gang zu setzen, kann zusätzlich ein kleines Stück Roggenbrot oder etwas Sauerteig als Abschluss obenauf gelegt werden. Der Behälter wird zugedeckt, aber nicht luftdicht verschlossen. Die Gurken werden nach Möglichkeit einige Tage bei etwa 30 °C – jedoch nicht darüber – gelagert, um die Milchsäuregärung in Gang zu setzen, danach bei Kellertemperatur. Nach etwa sechs Wochen ist die Gärung abgeschlossen.", "Es gibt typische Ponyrassen, welche sich durch stämmigen Wuchs, reiches Langhaar, starke Nerven und Leichtfuttrigkeit auszeichnen. Beispiele für typische Ponyrassen sind Shetlandpony, Dartmoor-Pony, Exmoor-Pony, New-Forest-Pony, Isländer und Highland-Pony. Andere Ponyrassen sind auf Reitpferdepoints, beispielsweise raumgreifende Gänge und Springvermögen gezogen und werden im Ponysport eingesetzt. Beispiele hierfür sind Welsh-Pony, Connemara-Pony und Deutsches Reitpony. Diese Ponyrassen wurden mit Arabern veredelt. Die Fütterung von typischen Ponyrassen unterscheidet sich von der Fütterung von Warmblütern. Ein typisches Pony benötigt wesentlich weniger Kraftfutter als ein Warmblüter. Ohne Arbeit, in der Erhaltungsfütterung, können im Sommer eine gute Weide und im Winter Heu und Wasser genügen. Je nach Bedarf ist es angebracht, Mineralfutter zu geben. Eine große Gefahr geht von übermäßig fetten Weiden und zu viel Kraftfutter aus, die Hufrehe, Kreuzverschlag und Koliken auslösen können. Auch ein Übermaß an Mineralfutter kann Hufschäden verursachen.", "Kakteen sind ausdauernde Sträucher, seltener Bäume oder Geophyten. Fast alle Arten sind Stammsukkulenten, deren Sprossachsen stark angeschwollen sind. Die Wurzeln sind meist faserig oder bilden bei Pflanzen mit nur geringer Stammsukkulenz manchmal sukkulente Knollen oder Rüben. Die Hauptsprosse stehen, häufig charakteristisch für bestimmte Gattungen, einzeln oder verzweigen von den Basen oder weiter oben. Hauptsprosse und Zweige wachsen meist aufrecht oder aufstrebend, manchmal auch kriechend oder hängend. Die Sprosse sind zylindrisch oder zu Platykladien abgeflacht und tragen häufig gut ausgebildete Rippen oder spiralig arrangierte Warzen. Areolen, die stark reduzierte Kurztriebe darstellen, stehen auf zylindrischen oder abgeflachten Sprossen meist gefeldert verteilt oder sonst auf den Erhöhungen der Rippen oder Warzen. Sie sind filzig und tragen Dornen, die umgewandelte Blätter darstellen, sowie häufig auch Wolle oder Borsten. Filz und Dornen sind bei jungen Sämlingen immer vorhanden, werden aber manchmal später abgeworfen oder von erwachsenen Pflanzen nicht mehr gebildet. Die den Areolen entspringenden Laubblätter sind manchmal vollständig ausgebildet (Unterfamilie Pereskioideae), häufig pfriemförmig, sukkulent und kurzlebig (Unterfamilien Opuntioideae und Maihuenioideae), fehlen aber meist völlig (Unterfamilie Cactoideae). Nebenblätter sind nicht vorhanden."]
+        }[l.data];
+        $('#text').text(a[~~(Math.random() * (a.length))]);
     }
-  }, 2000);
+
+    display('headphones', ["fadeInDown", "fadeInUp"]);
+    $('#fr').click('fr', fill_text);
+    $('#en').click('en', fill_text);
+    $('#it').click('it', fill_text);
+    $('#es').click('es', fill_text);
+    $('#de').click('de', fill_text);
+
+    setTimeout(function() {
+        var errorCallback = function(err) {
+            display("error", ["fadeInDown", "fadeInUp"]);
+        };
+
+        navigator.media = (navigator.getUserMedia
+        || navigator.webkitGetUserMedia
+        || navigator.mozGetUserMedia
+        || navigator.msGetUserMedia);
+
+        var context = new (window.AudioContext || window.webkitAudioContext)();
+
+        if (navigator.media && context) {
+            navigator.media({audio: true}, function(stream) {
+                var microphone = context.createMediaStreamSource(stream);
+                var delay = context.createDelay();
+                var gain = context.createGain();
+                delay.delayTime.value = 0.2;
+                gain.gain.value = 1.8;
+
+                microphone.connect(delay);
+                delay.connect(gain);
+                gain.connect(context.destination);
+
+                display('speak', ["fadeInDown", "fadeInUp"], function() {
+                    display('speak', ["fadeOutUp", "fadeOutDown"], function(){
+                        fill_text({data:'en'});
+                        $('#speak').hide();
+                        $('#speak-label').hide();
+                        $('#text').show();
+                        $('.sidebar').show();
+                        $('#text').addClass('animated fadeInDown');
+                    });
+                });
+            }, errorCallback);
+        } else {
+            errorCallback();
+        }
+    }, 2000);
 });

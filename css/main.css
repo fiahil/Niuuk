@@ -1,7 +1,7 @@
 html, body {
     /*overflow: hidden;*/
     margin: 0px;
-    height: 100%;
+    height: auto;
     width: 100%;
     font-family: 'Quicksand', sans-serif;
     font-weight: normal;
@@ -14,6 +14,7 @@ html, body {
     text-align: center;
     width: 100%;
     padding-top: 5%;
+    padding-bottom: 5%;
 }
 
 .fa {
@@ -30,6 +31,41 @@ html, body {
 }
 
 #text {
-    font-size: 2em;
+    font-size: 1.2em;
     display: none;
+    text-align: left;
+    margin-left: 3em;
+    margin-right: 3em;
+    word-break: break-word;
+}
+
+.sidebar {
+    padding-left: 1em;
+    float: left;
+    list-style: none;
+    text-align: left;
+    display: none;
+}
+
+.sidebar li {
+    margin-top: 0.2em;
+    margin-bottom: 0.2em;
+}
+
+.sidebar li a {
+    text-decoration: none;
+}
+
+.sidebar li a:hover {
+    text-decoration: underline;
+}
+
+@media (max-width: 420px) {
+    .fa {
+        font-size: 20em;
+    }
+
+    .label {
+        font-size: 2em;
+    }
 }
