@@ -1,5 +1,4 @@
 html, body {
-    /*overflow: hidden;*/
     margin: 0px;
     height: auto;
     width: 100%;
@@ -31,6 +30,7 @@ html, body {
 }
 
 #text {
+    font-family: 'Open Sans', sans-serif;
     font-size: 1.2em;
     display: none;
     text-align: left;
